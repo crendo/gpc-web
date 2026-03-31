@@ -1,0 +1,1044 @@
+-- SQLite Database Structure for GPC Mobile App
+-- Converted from MySQL schema
+-- WARNING: These DROP TABLE statements will erase ALL local data during version upgrades.
+-- Switch to incremental ALTER TABLE migrations once the implementation phase is finished.
+
+PRAGMA foreign_keys = OFF;
+
+-- Table: app_config
+DROP TABLE IF EXISTS `app_config`;
+CREATE TABLE `app_config` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `setting_key` TEXT NOT NULL UNIQUE,
+  `setting_value` TEXT
+);
+
+
+
+-- Table: categorias
+DROP TABLE IF EXISTS `categorias`;
+CREATE TABLE `categorias` (
+  `codcategoria` TEXT PRIMARY KEY,
+  `categoria` TEXT NOT NULL DEFAULT '',
+  `tipocategoria` TEXT DEFAULT NULL,
+  `usuario` TEXT DEFAULT NULL
+);
+
+-- Table: clientes
+DROP TABLE IF EXISTS `clientes`;
+CREATE TABLE `clientes` (
+  `codigocliente` TEXT DEFAULT '',
+  `idcliente` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `codigopais` TEXT NOT NULL DEFAULT '',
+  `cliente` TEXT NOT NULL DEFAULT '',
+  `direccion` TEXT DEFAULT NULL,
+  `rif` TEXT DEFAULT NULL,
+  `nit` TEXT DEFAULT NULL,
+  `telefono` TEXT DEFAULT NULL,
+  `reporteoc` TEXT DEFAULT NULL,
+  `vobotecnico` TEXT DEFAULT NULL,
+  `responsablegerenco` TEXT DEFAULT NULL,
+  `autorizacion` TEXT DEFAULT NULL,
+  `codigoautorizacion` TEXT DEFAULT '1',
+  `linkimagen` TEXT DEFAULT NULL,
+  `logo` BLOB DEFAULT NULL
+);
+
+-- Table: compania
+DROP TABLE IF EXISTS `compania`;
+CREATE TABLE `compania` (
+  `codcompania` TEXT PRIMARY KEY,
+  `compania` TEXT NOT NULL DEFAULT '',
+  `usuario` TEXT DEFAULT NULL
+);
+
+-- Table: condicionespago
+DROP TABLE IF EXISTS `condicionespago`;
+CREATE TABLE `condicionespago` (
+  `condicionespago` TEXT
+);
+
+-- Table: contratistas
+DROP TABLE IF EXISTS `contratistas`;
+CREATE TABLE `contratistas` (
+  `idcontratista` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `codigocontratista` TEXT NOT NULL DEFAULT '',
+  `codigopais` TEXT NOT NULL DEFAULT '',
+  `contratista` TEXT NOT NULL DEFAULT '',
+  `direccion` TEXT DEFAULT NULL,
+  `tlf` TEXT DEFAULT NULL,
+  `datoscuentabancaria` TEXT DEFAULT NULL,
+  `representantelegal` TEXT DEFAULT NULL,
+  `webpage` TEXT,
+  `codigocategoria` INTEGER DEFAULT NULL,
+  `publicar` INTEGER NOT NULL DEFAULT -1,
+  `email` TEXT DEFAULT NULL,
+  `ubicacionarchivo` TEXT DEFAULT NULL,
+  `clase` TEXT NOT NULL DEFAULT 'C',
+  `rif` TEXT DEFAULT NULL,
+  `nit` TEXT DEFAULT NULL,
+  `p_retiva` REAL NOT NULL DEFAULT 1.0
+);
+
+
+-- Table: contrato
+DROP TABLE IF EXISTS `contrato`;
+CREATE TABLE `contrato` (
+  `idcontrato` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `codigopais` TEXT NOT NULL DEFAULT '',
+  `codigoobra` TEXT NOT NULL DEFAULT '',
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `codigocontrato` TEXT NOT NULL DEFAULT '',
+  `idoc` INTEGER NOT NULL DEFAULT 0,
+  `codigocontratista` TEXT DEFAULT NULL,
+  `idcontratista` INTEGER NOT NULL DEFAULT 0,
+  `alcancecontrato` TEXT,
+  `esorden` INTEGER DEFAULT NULL,
+  `fechainicio` TEXT DEFAULT NULL,
+  `fechafin` TEXT DEFAULT NULL,
+  `p_islr` REAL DEFAULT NULL,
+  `p_garlab` REAL DEFAULT NULL,
+  `p_fielcump` REAL DEFAULT NULL,
+  `p_iva` REAL DEFAULT NULL,
+  `codigoestimado` TEXT DEFAULT NULL,
+  `endolares` INTEGER DEFAULT NULL,
+  `ubicacionarchivo` TEXT DEFAULT NULL,
+  `escajachica` INTEGER DEFAULT 0,
+  `variacion` REAL DEFAULT 0.0,
+  `descvariacion` TEXT,
+  `espresupuesto` INTEGER DEFAULT 0,
+  `paridad` REAL DEFAULT NULL
+);
+
+-- Table: contratosgerenco
+DROP TABLE IF EXISTS `contratosgerenco`;
+CREATE TABLE `contratosgerenco` (
+  `id_contratogerenco` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `codigopais` TEXT DEFAULT NULL,
+  `codigoobra` TEXT DEFAULT NULL,
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `codigocontrato` TEXT DEFAULT NULL,
+  `codigoestimado` TEXT DEFAULT NULL,
+  `tipocontrato` TEXT DEFAULT NULL,
+  `p_honorarios` REAL DEFAULT 0.0,
+  `hastasuma` REAL DEFAULT 0.0,
+  `idoc` INTEGER NOT NULL DEFAULT 0
+);
+
+-- Table: pais
+DROP TABLE IF EXISTS `pais`;
+CREATE TABLE `datospais` (
+  `codigopais` TEXT PRIMARY KEY,
+  `pais` TEXT NOT NULL DEFAULT '',
+  `monedacorta` TEXT DEFAULT NULL,
+  `monedalarga` TEXT DEFAULT NULL,
+  `posicionsimbolo` INTEGER DEFAULT NULL,
+  `ciudad` TEXT DEFAULT NULL,
+  `terminovaluacion` TEXT DEFAULT NULL,
+  `razonsocial` TEXT DEFAULT NULL,
+  `direccionempresa` TEXT DEFAULT NULL,
+  `telempresa` TEXT DEFAULT NULL,
+  `requiererif` INTEGER DEFAULT NULL,
+  `rif` TEXT DEFAULT NULL,
+  `nit` TEXT DEFAULT NULL,
+  `terminoiva` TEXT DEFAULT NULL,
+  `tlf1` TEXT DEFAULT NULL,
+  `tlf2` TEXT DEFAULT NULL,
+  `fax` TEXT DEFAULT NULL,
+  `direccion` TEXT DEFAULT NULL,
+  `web` TEXT DEFAULT NULL
+);
+
+
+
+
+-- Table: defaults
+DROP TABLE IF EXISTS `defaults`;
+CREATE TABLE `defaults` (
+  `id_defaults` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `idb` REAL NOT NULL DEFAULT 1.0,
+  `usaridb` INTEGER NOT NULL DEFAULT -1,
+  `piva` REAL NOT NULL DEFAULT 0.16,
+  `pislr` REAL NOT NULL DEFAULT 0.09,
+  `pgarlab` REAL NOT NULL DEFAULT 0.0,
+  `pfielcump` REAL NOT NULL DEFAULT 0.0,
+  `paridad` REAL NOT NULL DEFAULT 2150.0,
+  `logo` BLOB
+);
+
+INSERT INTO `defaults` (`id_defaults`, `idb`, `usaridb`, `piva`, `pislr`, `pgarlab`, `pfielcump`, `paridad`) VALUES (1, 1.0, -1, 0.16, 0.03, 0.0, 0.0, 1.0);
+
+-- Table: detallerelacion
+DROP TABLE IF EXISTS `detallerelacion`;
+CREATE TABLE `detallerelacion` (
+  `codigopais` TEXT DEFAULT NULL,
+  `codigoobra` TEXT DEFAULT NULL,
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `codigorelacion` TEXT DEFAULT NULL,
+  `codigocontratog` TEXT DEFAULT NULL,
+  `idoc` INTEGER DEFAULT 0,
+  `monto` REAL DEFAULT 0.0,
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT
+);
+
+-- Table: detalleoc
+DROP TABLE IF EXISTS `detalleoc`;
+CREATE TABLE `detalleoc` (
+  `iddetalle` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `idoc` INTEGER DEFAULT 0,
+  `ordenno` TEXT DEFAULT NULL,
+  `codigopais` TEXT DEFAULT NULL,
+  `codigoobra` TEXT DEFAULT NULL,
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `posicion` TEXT DEFAULT NULL,
+  `descripcion` TEXT,
+  `unidad` TEXT DEFAULT NULL,
+  `cantidad` REAL DEFAULT 0.0,
+  `punit` REAL DEFAULT 0.0,
+  `iva` INTEGER DEFAULT 0,
+  `codigopartida` TEXT DEFAULT NULL,
+  `codificado` INTEGER DEFAULT 0,
+  `aumentoautorizado` REAL DEFAULT 0.0,
+  `autorizadopor` TEXT DEFAULT NULL,
+  `original` INTEGER DEFAULT -1,
+  `fechaaumento` TEXT DEFAULT NULL,
+  `esordendecambio` INTEGER DEFAULT 0,
+  `cambioautorizado` INTEGER DEFAULT 0,
+  `estitulo` INTEGER DEFAULT 0,
+  `negrillas` INTEGER DEFAULT 0,
+  `mostrarpos` INTEGER DEFAULT -1
+);
+
+-- Table: detallevaluaciones
+DROP TABLE IF EXISTS `detallevaluaciones`;
+CREATE TABLE `detallevaluaciones` (
+  `iddetallevaluacion` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `iddetalleoc` INTEGER NOT NULL DEFAULT 0,
+  `codigopais` TEXT DEFAULT NULL,
+  `codigoobra` TEXT DEFAULT NULL,
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `codigocontrato` TEXT DEFAULT NULL,
+  `idoc` INTEGER DEFAULT 0,
+  `valuacion` INTEGER DEFAULT 0,
+  `cantidad` REAL DEFAULT 0.0,
+  `autorizada` INTEGER DEFAULT 0
+);
+
+-- Table: documentacioncontrato
+DROP TABLE IF EXISTS `documentacioncontrato`;
+CREATE TABLE `documentacioncontrato` (
+  `codigopais` TEXT DEFAULT NULL,
+  `codigoobra` TEXT DEFAULT NULL,
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `codigocontrato` TEXT DEFAULT NULL,
+  `idoc` INTEGER DEFAULT 0,
+  `documento` TEXT DEFAULT NULL,
+  `vencimiento` TEXT DEFAULT NULL,
+  `consignado` INTEGER DEFAULT 0,
+  `linkarchivo` TEXT DEFAULT NULL,
+  `iddocumentacion` INTEGER PRIMARY KEY AUTOINCREMENT
+);
+
+-- Table: descargos
+DROP TABLE IF EXISTS `descargos`;
+CREATE TABLE `descargos` (
+  `codigopais` TEXT NOT NULL DEFAULT '',
+  `codigoobra` TEXT NOT NULL DEFAULT '',
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `codigoestimado` TEXT NOT NULL DEFAULT '',
+  `descestimado` TEXT DEFAULT NULL,
+  `montolocal` REAL DEFAULT 0.0,
+  `montoreferencia` REAL DEFAULT 0.0,
+  `p_gerenco` REAL DEFAULT 0.0,
+  UNIQUE (`idobra`, `codigoestimado`)
+);
+
+-- Table: estimados
+DROP TABLE IF EXISTS `estimados`;
+CREATE TABLE `estimados` (
+  `codigopais` TEXT NOT NULL DEFAULT '',
+  `codigoobra` TEXT NOT NULL DEFAULT '',
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `codigoestimado` TEXT NOT NULL DEFAULT '',
+  `descestimado` TEXT DEFAULT NULL,
+  `montolocal` REAL DEFAULT 0.0,
+  `montoreferencia` REAL DEFAULT 0.0,
+  `p_gerenco` REAL DEFAULT 0.0,
+  UNIQUE (`idobra`, `codigoestimado`)
+);
+
+-- Table: filialescliente
+DROP TABLE IF EXISTS `filialescliente`;
+CREATE TABLE `filialescliente` (
+  `idfilial` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `codigopais` TEXT DEFAULT NULL,
+  `codigocliente` TEXT DEFAULT NULL,
+  `codigofilial` TEXT DEFAULT NULL,
+  `filial` TEXT DEFAULT NULL,
+  `direccion` TEXT DEFAULT NULL,
+  `rif` TEXT DEFAULT NULL,
+  `nit` TEXT DEFAULT NULL,
+  `telefono` TEXT DEFAULT NULL,
+  `idcliente` INTEGER DEFAULT 0,
+  `logo` BLOB DEFAULT NULL
+);
+
+-- Table: filialesgrupo
+DROP TABLE IF EXISTS `filialesgrupo`;
+CREATE TABLE `filialesgrupo` (
+  `idfilial` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `codigopais` TEXT DEFAULT NULL,
+  `codigofilial` TEXT DEFAULT NULL,
+  `filial` TEXT DEFAULT NULL,
+  `direccion` TEXT DEFAULT NULL,
+  `rif` TEXT DEFAULT NULL,
+  `nit` TEXT DEFAULT NULL,
+  `telefono` TEXT DEFAULT NULL,
+  `codcompania` TEXT DEFAULT NULL
+);
+
+-- Table: hh_activity_user
+DROP TABLE IF EXISTS `hh_activity_user`;
+CREATE TABLE `hh_activity_user` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `id_actividad` INTEGER NOT NULL,
+  `id_usuario` INTEGER NOT NULL,
+  `fecha` TEXT NOT NULL,
+  `hh_worked` REAL NOT NULL DEFAULT 0.0,
+  `created_at` TEXT DEFAULT NULL,
+  `updated_at` TEXT DEFAULT NULL
+);
+
+-- Table: hh_categorias_recursos
+DROP TABLE IF EXISTS `hh_categorias_recursos`;
+CREATE TABLE `hh_categorias_recursos` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `categoria` TEXT NOT NULL,
+  `valor_hora` REAL NOT NULL DEFAULT 0.0
+);
+
+-- Table: hh_recursos_programados
+DROP TABLE IF EXISTS `hh_recursos_programados`;
+CREATE TABLE `hh_recursos_programados` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `id_tarea` INTEGER NOT NULL,
+  `id_usuario` INTEGER NOT NULL,
+  `id_categoria` INTEGER NOT NULL,
+  `horas_estimadas` REAL NOT NULL DEFAULT 0.0,
+  `posicion` REAL DEFAULT 0.0
+);
+
+-- Table: hh_trabajadas
+DROP TABLE IF EXISTS `hh_trabajadas`;
+CREATE TABLE `hh_trabajadas` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `id_usuario` INTEGER NOT NULL,
+  `id_proyecto` INTEGER NOT NULL,
+  `id_tarea` INTEGER NOT NULL,
+  `id_actividad` INTEGER DEFAULT NULL,
+  `fecha_reporte` TEXT NOT NULL,
+  `duracion` REAL NOT NULL,
+  `unidad_duracion` TEXT NOT NULL,
+  `aprobado` INTEGER DEFAULT 0,
+  `nota` TEXT
+);
+
+-- Table: historiacambios
+DROP TABLE IF EXISTS `historiacambios`;
+CREATE TABLE `historiacambios` (
+  `idhistoria` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `idoc` INTEGER NOT NULL DEFAULT 0,
+  `iddetalle` INTEGER NOT NULL DEFAULT 0,
+  `cantidad` REAL DEFAULT NULL,
+  `autorizado` INTEGER DEFAULT NULL,
+  `fecha` TEXT DEFAULT NULL,
+  `autorizadopor` TEXT DEFAULT NULL
+);
+
+-- Table: obras
+DROP TABLE IF EXISTS `obras`;
+CREATE TABLE `obras` (
+  `codigopais` TEXT NOT NULL DEFAULT '',
+  `codigoobra` TEXT NOT NULL DEFAULT '',
+  `idobra` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `codigocliente` TEXT DEFAULT NULL,
+  `idcliente` INTEGER DEFAULT 0,
+  `codigoestimado` TEXT DEFAULT NULL,
+  `descobra` TEXT NOT NULL DEFAULT '',
+  `fechainicio` TEXT DEFAULT NULL,
+  `contacto` TEXT DEFAULT NULL,
+  `tiempoejecucion` TEXT DEFAULT NULL,
+  `tienda` TEXT DEFAULT NULL,
+  `activa` INTEGER DEFAULT -1,
+  `retislrgarantias` INTEGER DEFAULT -1,
+  `retivagarantias` INTEGER DEFAULT -1,
+  `ivaxdefecto` REAL DEFAULT 0.0,
+  `controlcantidades` INTEGER DEFAULT 0,
+  `codtipo` TEXT DEFAULT NULL,
+  `publicar` INTEGER DEFAULT -1,
+  `linkimagen` TEXT DEFAULT NULL,
+  `area1` REAL DEFAULT 0.0,
+  `txt1` TEXT DEFAULT NULL,
+  `area2` REAL DEFAULT 0.0,
+  `txt2` TEXT DEFAULT NULL,
+  `area3` REAL DEFAULT 0.0,
+  `txt3` TEXT DEFAULT NULL,
+  `finalizada` INTEGER DEFAULT 0,
+  `p_prestac` REAL DEFAULT 0.0,
+  `p_admin` REAL DEFAULT 0.0,
+  `p_util` REAL DEFAULT 0.0,
+  `bonoalim` REAL DEFAULT 0.0,
+  `ivaenapu` INTEGER DEFAULT 0,
+  `constructor` INTEGER DEFAULT 0,
+  `idfilialgrupo` INTEGER DEFAULT 0,
+  `codcompania` TEXT DEFAULT NULL,
+  `paridad` REAL DEFAULT 0.0
+);
+
+-- Table: observaciones
+DROP TABLE IF EXISTS `observaciones`;
+CREATE TABLE `observaciones` (
+  `codobservacion` TEXT NOT NULL DEFAULT '',
+  `descobservacion` TEXT NOT NULL DEFAULT '',
+  PRIMARY KEY (`codobservacion`)
+);
+
+-- Table: ocmakro
+DROP TABLE IF EXISTS `ocmakro`;
+CREATE TABLE `ocmakro` (
+  `idoc` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `ordenno` TEXT NOT NULL DEFAULT '',
+  `codigoobra` TEXT NOT NULL DEFAULT '',
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `codigopais` TEXT NOT NULL DEFAULT '',
+  `codigocontratista` TEXT DEFAULT NULL,
+  `idcontratista` INTEGER NOT NULL DEFAULT 0,
+  `textoresumenorden` TEXT,
+  `codigofilial_afacturar` TEXT DEFAULT NULL,
+  `idfilialafacturar` INTEGER DEFAULT 1,
+  `idfilialaconsignar` INTEGER DEFAULT 1,
+  `codigofilial_aconsignar` TEXT DEFAULT NULL,
+  `fecha` TEXT DEFAULT NULL,
+  `p_iva` REAL DEFAULT NULL,
+  `solicitado` TEXT DEFAULT NULL,
+  `condicionespago` TEXT,
+  `codobservacion` TEXT DEFAULT NULL,
+  `fechainicio` TEXT DEFAULT NULL,
+  `fechaentrega` TEXT DEFAULT NULL,
+  `notafechaentrega` TEXT DEFAULT NULL,
+  `endolares` INTEGER DEFAULT 0,
+  `nota1` TEXT,
+  `nota2` TEXT,
+  `tipoordencompra` TEXT DEFAULT NULL,
+  `garantizador` TEXT,
+  `direcciongarantizador` TEXT,
+  `duraciongarantia` TEXT,
+  `condicionesgarantia` TEXT,
+  `montofianza` REAL DEFAULT 0.0,
+  `direccionfianza` TEXT,
+  `duracionfianza` TEXT,
+  `condicionesfianza` TEXT,
+  `jurisdiccionlegal` TEXT,
+  `seguro` TEXT,
+  `flete` TEXT,
+  `embarcarpor` TEXT,
+  `aprobadopor` TEXT,
+  `autorizado` INTEGER DEFAULT -1,
+  `autorizadopor` TEXT,
+  `anulada` INTEGER DEFAULT 0,
+  `espresupuesto` INTEGER DEFAULT 0,
+  `elaboradapor` TEXT,
+  `modificadapor` TEXT,
+  `eshonorario` INTEGER DEFAULT 0,
+  `esorden` INTEGER DEFAULT -1
+);
+
+-- Table: pagos
+DROP TABLE IF EXISTS `pagos`;
+CREATE TABLE `pagos` (
+  `idpago` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `idvaluacion` INTEGER DEFAULT 0,
+  `codigopais` TEXT DEFAULT NULL,
+  `codigopago` TEXT DEFAULT NULL,
+  `codigoobra` TEXT DEFAULT NULL,
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `codigocontrato` TEXT DEFAULT NULL,
+  `idoc` INTEGER DEFAULT 0,
+  `codigocontratogerenco` TEXT DEFAULT NULL,
+  `valuacion` INTEGER DEFAULT 0,
+  `facturacontratista` TEXT DEFAULT NULL,
+  `fechaemision` TEXT DEFAULT NULL,
+  `codigoestimado` TEXT DEFAULT NULL,
+  `totalbruto` REAL DEFAULT 0.0,
+  `adicionalobra` REAL DEFAULT 0.0,
+  `otrosadicionales` REAL DEFAULT 0.0,
+  `totalbrutofactura` REAL DEFAULT 0.0,
+  `pivafactura` REAL DEFAULT NULL,
+  `totalivabruto` REAL DEFAULT 0.0,
+  `totalivaadicional` REAL DEFAULT 0.0,
+  `pislrfactura` REAL DEFAULT NULL,
+  `totalislrbruto` REAL DEFAULT 0.0,
+  `totalislradicional` REAL DEFAULT 0.0,
+  `pgarlabfactura` REAL DEFAULT NULL,
+  `totalgarlab` REAL DEFAULT 0.0,
+  `pfielcumpfactura` REAL DEFAULT NULL,
+  `totalfielcump` REAL DEFAULT 0.0,
+  `pamortfactura` REAL DEFAULT NULL,
+  `totalamortizacion` REAL DEFAULT 0.0,
+  `totalneto` REAL DEFAULT 0.0,
+  `impreso` INTEGER DEFAULT NULL,
+  `relacionado` INTEGER DEFAULT -1,
+  `pagado` INTEGER DEFAULT 0,
+  `cheque` TEXT DEFAULT NULL,
+  `banco` TEXT DEFAULT NULL,
+  `final` INTEGER DEFAULT 0,
+  `fechapago` TEXT DEFAULT NULL,
+  `fecharecepcion` TEXT DEFAULT NULL,
+  `fecharecepciongerenco` TEXT DEFAULT NULL,
+  `endolares` INTEGER DEFAULT 0,
+  `moneda_nativa` TEXT DEFAULT 'USD',
+  `facturara` TEXT DEFAULT '000',
+  `chkamort` INTEGER DEFAULT -1,
+  `chkiva` INTEGER DEFAULT -1,
+  `chkislr` INTEGER DEFAULT -1,
+  `chkgarlab` INTEGER DEFAULT -1,
+  `chkfielcump` INTEGER DEFAULT -1,
+  `esadelanto` INTEGER DEFAULT -1,
+  `esrecibo` INTEGER DEFAULT -1,
+  `totalcontrato` REAL DEFAULT 0.0,
+  `idclienteafacturar` INTEGER DEFAULT 0,
+  `procesadapor` TEXT DEFAULT NULL,
+  `procesadafecha` TEXT DEFAULT NULL,
+  `p_retiva` REAL DEFAULT 75.0,
+  `idcontrato` INTEGER DEFAULT 0
+);
+
+-- Table: pagosadicionales
+DROP TABLE IF EXISTS `pagosadicionales`;
+CREATE TABLE `pagosadicionales` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `idobra` INTEGER NOT NULL,
+  `idpago` INTEGER NOT NULL,
+  `idestimado` TEXT NOT NULL,
+  `montolocal` REAL NOT NULL DEFAULT 0.0,
+  `montoreferencia` REAL NOT NULL DEFAULT 0.0,
+  `p_gerenco` REAL NOT NULL DEFAULT 0.0
+);
+
+-- Table: password_reset_requests
+DROP TABLE IF EXISTS `password_reset_requests`;
+CREATE TABLE `password_reset_requests` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `user_login` TEXT NOT NULL,
+  `ip_address` TEXT NOT NULL,
+  `requested_at` TEXT NOT NULL,
+  `status` TEXT NOT NULL DEFAULT 'pending',
+  `processed_by` INTEGER DEFAULT NULL,
+  `processed_at` TEXT DEFAULT NULL
+);
+
+-- Table: proyectos
+DROP TABLE IF EXISTS `proyectos`;
+CREATE TABLE `proyectos` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `nombre` TEXT NOT NULL,
+  `descripcion` TEXT,
+  `fecha_inicio` TEXT DEFAULT NULL,
+  `fecha_fin` TEXT DEFAULT NULL,
+  `unidad_duracion` TEXT NOT NULL DEFAULT 'dias',
+  `aprobado` INTEGER NOT NULL DEFAULT 0,
+  `activa` INTEGER NOT NULL DEFAULT -1,
+  `es_generico` INTEGER NOT NULL DEFAULT 0
+);
+
+-- Table: scheduled_tasks
+DROP TABLE IF EXISTS `scheduled_tasks`;
+CREATE TABLE `scheduled_tasks` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `id_proyecto` INTEGER NOT NULL,
+  `nombre` TEXT NOT NULL,
+  `descripcion` TEXT,
+  `fecha_inicio` TEXT DEFAULT NULL,
+  `fecha_fin` TEXT DEFAULT NULL,
+  `duracion_programada` REAL NOT NULL DEFAULT 0.0,
+  `unidad_duracion` TEXT NOT NULL DEFAULT 'dias',
+  `es_original` INTEGER NOT NULL DEFAULT -1,
+  `aprobado` INTEGER NOT NULL DEFAULT 0,
+  `posicion` INTEGER DEFAULT 0,
+  `predecesor_id` INTEGER DEFAULT NULL,
+  `tipo_precedencia` TEXT DEFAULT 'FS',
+  `lag` REAL DEFAULT 0.0,
+  `estado` TEXT DEFAULT 'Pendiente',
+  `start_date` TEXT DEFAULT NULL,
+  `completion_date` TEXT DEFAULT NULL
+);
+
+-- Table: tipocontratogerenco
+DROP TABLE IF EXISTS `tipocontratogerenco`;
+CREATE TABLE `tipocontratogerenco` (
+  `tipocontrato` TEXT PRIMARY KEY,
+  `descripcion` TEXT
+);
+
+-- Table: tiposobra
+DROP TABLE IF EXISTS `tiposobra`;
+CREATE TABLE `tiposobra` (
+  `codtipo` TEXT PRIMARY KEY,
+  `tipoobra` TEXT NOT NULL DEFAULT ''
+);
+
+-- Table: todo_activities
+DROP TABLE IF EXISTS `todo_activities`;
+CREATE TABLE `todo_activities` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `id_proyecto` INTEGER NOT NULL,
+  `id_tarea` INTEGER DEFAULT NULL,
+  `nombre` TEXT NOT NULL,
+  `descripcion` TEXT,
+  `estado` TEXT NOT NULL DEFAULT 'Pendiente',
+  `id_usuario_origen` INTEGER NOT NULL,
+  `id_usuario_actual` INTEGER NOT NULL,
+  `start_date` TEXT DEFAULT NULL,
+  `completion_date` TEXT DEFAULT NULL,
+  `hh_worked` REAL NOT NULL DEFAULT 0.0,
+  `hh_waiting` REAL NOT NULL DEFAULT 0.0,
+  `hh_blocked` REAL NOT NULL DEFAULT 0.0,
+  `external_actor_name` TEXT DEFAULT NULL,
+  `external_actor_reason` TEXT DEFAULT NULL,
+  `external_actor_expected_date` TEXT DEFAULT NULL,
+  `posicion` INTEGER NOT NULL DEFAULT 0,
+  `created_at` TEXT DEFAULT NULL,
+  `updated_at` TEXT DEFAULT NULL
+);
+
+-- Table: todo_notifications
+DROP TABLE IF EXISTS `todo_notifications`;
+CREATE TABLE `todo_notifications` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `id_usuario` INTEGER NOT NULL,
+  `id_activity` INTEGER NOT NULL,
+  `tipo` TEXT NOT NULL,
+  `mensaje` TEXT NOT NULL,
+  `leido` INTEGER NOT NULL DEFAULT 0,
+  `created_at` TEXT DEFAULT NULL
+);
+
+-- Table: todo_routing
+DROP TABLE IF EXISTS `todo_routing`;
+CREATE TABLE `todo_routing` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `id_activity` INTEGER NOT NULL,
+  `event_date` TEXT NOT NULL,
+  `id_usuario_from` INTEGER DEFAULT NULL,
+  `id_usuario_to` INTEGER DEFAULT NULL,
+  `estado_anterior` TEXT NOT NULL,
+  `estado_nuevo` TEXT NOT NULL,
+  `nota` TEXT
+);
+
+-- Table: usuario
+DROP TABLE IF EXISTS `usuario`;
+CREATE TABLE `usuario` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `nombre` TEXT NOT NULL,
+  `email` TEXT NOT NULL UNIQUE,
+  `password` TEXT NOT NULL,
+  `role` TEXT NOT NULL DEFAULT 'user',
+  `created_at` TEXT DEFAULT NULL,
+  `updated_at` TEXT DEFAULT NULL
+);
+
+-- Table: usuarios
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE `usuarios` (
+  `id_usuario` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `login` TEXT NOT NULL DEFAULT '',
+  `pass` TEXT DEFAULT NULL,
+  `token` TEXT DEFAULT NULL,
+  `lastlogin` TEXT DEFAULT NULL,
+  `proyectos` TEXT,
+  `grupo` TEXT DEFAULT NULL,
+  `email` TEXT DEFAULT NULL,
+  `logaccess` INTEGER DEFAULT -1,
+  `apodo` TEXT DEFAULT NULL,
+  `usuarioadmin` INTEGER NOT NULL DEFAULT 0,
+  `versaldo` INTEGER NOT NULL DEFAULT 0,
+  `usuario` TEXT DEFAULT NULL,
+  `nivelacceso` TEXT NOT NULL DEFAULT 'General',
+  `extension` TEXT DEFAULT NULL,
+  `active` INTEGER NOT NULL DEFAULT 0,
+  `ramdomkey` TEXT DEFAULT NULL,
+  `must_change_password` INTEGER DEFAULT 0
+);
+
+INSERT INTO `usuarios` (`login`, `pass`, `token`, `nivelacceso`, `active`, `usuarioadmin`, `usuario`)
+VALUES ('admin', 'admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Supervisor', 1, 1, 'Administrator');
+
+-- Table: valuaciones
+DROP TABLE IF EXISTS `valuaciones`;
+CREATE TABLE `valuaciones` (
+  `idvaluacion` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `codigopais` TEXT NOT NULL DEFAULT '',
+  `codigoobra` TEXT NOT NULL DEFAULT '',
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `codigocontrato` TEXT NOT NULL DEFAULT '',
+  `idoc` INTEGER NOT NULL DEFAULT 0,
+  `valuacion` REAL NOT NULL DEFAULT 0.0,
+  `codigoproveedor` TEXT DEFAULT NULL,
+  `idcontratista` INTEGER NOT NULL DEFAULT 0,
+  `fechavaluacion` TEXT DEFAULT NULL,
+  `facturada` INTEGER DEFAULT NULL,
+  `nofactura` TEXT DEFAULT NULL,
+  `recibidogerenco` INTEGER DEFAULT NULL,
+  `procesadagerenco` INTEGER DEFAULT NULL,
+  `comentarios` TEXT,
+  `esrecibo` INTEGER DEFAULT NULL,
+  `idpago` INTEGER DEFAULT 0,
+  `totalamort` REAL DEFAULT 0.0,
+  `totaliva` REAL DEFAULT 0.0,
+  `totalislr` REAL DEFAULT 0.0,
+  `totalgarlab` REAL DEFAULT 0.0,
+  `totalfielcump` REAL DEFAULT 0.0,
+  `desde` TEXT DEFAULT NULL,
+  `hasta` TEXT DEFAULT NULL
+);
+
+-- Table: receipts
+DROP TABLE IF EXISTS `receipts`;
+CREATE TABLE `receipts` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `id_obra` INTEGER NOT NULL,
+  `vendor` TEXT,
+  `date` TEXT,
+  `total_amount` REAL DEFAULT 0.0,
+  `image_path` TEXT,
+  `created_at` TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table: receipt_items
+DROP TABLE IF EXISTS `receipt_items`;
+CREATE TABLE `receipt_items` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `receipt_id` INTEGER NOT NULL,
+  `item_no` TEXT,
+  `description` TEXT,
+  `unit` TEXT,
+  `quantity` REAL DEFAULT 0.0,
+  `price` REAL DEFAULT 0.0,
+  `total` REAL DEFAULT 0.0,
+  FOREIGN KEY (`receipt_id`) REFERENCES `receipts` (`id`) ON DELETE CASCADE
+);
+
+-- Table: categoria
+DROP TABLE IF EXISTS `categoria`;
+CREATE TABLE `categoria` (
+  `codigocategoria` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `categoria` TEXT NOT NULL DEFAULT ''
+);
+
+-- Table: datospais
+DROP TABLE IF EXISTS `datospais`;
+CREATE TABLE `datospais` (
+  `codigopais` TEXT PRIMARY KEY,
+  `pais` TEXT NOT NULL DEFAULT '',
+  `monedacorta` TEXT DEFAULT NULL,
+  `monedalarga` TEXT DEFAULT NULL,
+  `posicionsimbolo` INTEGER DEFAULT NULL,
+  `ciudad` TEXT DEFAULT NULL,
+  `terminovaluacion` TEXT DEFAULT NULL,
+  `razonsocial` TEXT NOT NULL,
+  `direccionempresa` TEXT DEFAULT NULL,
+  `telempresa` TEXT DEFAULT NULL,
+  `requiererif` INTEGER DEFAULT NULL,
+  `rif` TEXT DEFAULT NULL,
+  `nit` TEXT DEFAULT NULL,
+  `terminoiva` TEXT DEFAULT NULL
+);
+
+-- Default country seed: Venezuela (auto-selected for local-mode installs)
+INSERT OR IGNORE INTO `datospais` (`codigopais`, `pais`, `monedacorta`, `monedalarga`, `posicionsimbolo`, `terminoiva`, `requiererif`, `razonsocial`)
+VALUES ('VEN', 'Venezuela', 'Bs', 'Bolívares', 0, 'IVA', 1, 'Constructora Local CA');
+
+-- Table: detallenotaentrega
+DROP TABLE IF EXISTS `detallenotaentrega`;
+CREATE TABLE `detallenotaentrega` (
+  `codigopais` TEXT NOT NULL,
+  `codigoobra` TEXT NOT NULL DEFAULT '',
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `iddetallerelacion` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `iddetalle` INTEGER DEFAULT NULL,
+  `codigoproveedor` TEXT DEFAULT NULL,
+  `idcontratista` INTEGER NOT NULL DEFAULT 0,
+  `notaentrega` TEXT DEFAULT NULL,
+  `codigoinsumo` TEXT DEFAULT NULL,
+  `cantidad` REAL DEFAULT 0.0,
+  `idinsumo` INTEGER NOT NULL
+);
+
+-- Table: detallescajachica
+DROP TABLE IF EXISTS `detallescajachica`;
+CREATE TABLE `detallescajachica` (
+  `codigopais` TEXT DEFAULT NULL,
+  `codigoobra` TEXT DEFAULT NULL,
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `codigocontrato` TEXT DEFAULT NULL,
+  `relacioncc` INTEGER DEFAULT 0,
+  `id_cajachica` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `fecha` TEXT DEFAULT NULL,
+  `beneficiario` TEXT DEFAULT NULL,
+  `concepto` TEXT DEFAULT NULL,
+  `monto` REAL NOT NULL DEFAULT 0.0,
+  `tieneiva` INTEGER DEFAULT -1,
+  `montoiva` REAL DEFAULT 0.0,
+  `escosto` INTEGER DEFAULT -1,
+  `codigoestimado` TEXT DEFAULT NULL,
+  `relacionado` INTEGER NOT NULL DEFAULT -1,
+  `codigocontratogerenco` TEXT DEFAULT NULL,
+  `recibo` TEXT DEFAULT NULL,
+  `fecharecibo` TEXT DEFAULT NULL,
+  `facturara` TEXT DEFAULT NULL,
+  `idpago` INTEGER DEFAULT NULL,
+  `idpagomov` INTEGER DEFAULT NULL,
+  `idoc` INTEGER NOT NULL DEFAULT 0
+);
+
+-- Table: documentacionobra
+DROP TABLE IF EXISTS `documentacionobra`;
+CREATE TABLE `documentacionobra` (
+  `codigopais` TEXT DEFAULT NULL,
+  `codigoobra` TEXT DEFAULT NULL,
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `descdocumento` TEXT DEFAULT NULL,
+  `linkdocumento` TEXT
+);
+
+-- Table: documentacionpagos
+DROP TABLE IF EXISTS `documentacionpagos`;
+CREATE TABLE `documentacionpagos` (
+  `codigopais` TEXT DEFAULT NULL,
+  `codigoobra` TEXT DEFAULT NULL,
+  `idobra` INTEGER NOT NULL DEFAULT 0,
+  `codigocontrato` TEXT DEFAULT NULL,
+  `codigopago` INTEGER DEFAULT NULL,
+  `descdocumento` TEXT DEFAULT NULL,
+  `linkdocumento` TEXT,
+  `idoc` INTEGER NOT NULL DEFAULT 0
+);
+
+-- Table: grupo
+DROP TABLE IF EXISTS `grupo`;
+CREATE TABLE `grupo` (
+  `grupo` TEXT PRIMARY KEY,
+  `descripcion` TEXT DEFAULT NULL,
+  `data` TEXT DEFAULT NULL,
+  `email` TEXT DEFAULT NULL,
+  `notificar` INTEGER DEFAULT -1,
+  `rolgrupo` INTEGER NOT NULL DEFAULT 0
+);
+
+-- Table: paridad
+DROP TABLE IF EXISTS `paridad`;
+CREATE TABLE `paridad` (
+  `fecha` TEXT NOT NULL DEFAULT '0000-00-00',
+  `codigopais` TEXT NOT NULL DEFAULT '',
+  `paridad` REAL DEFAULT NULL,
+  UNIQUE (`fecha`,`codigopais`)
+);
+
+-- Table: apu_master
+DROP TABLE IF EXISTS `apu_master`;
+CREATE TABLE `apu_master` (
+  `idapumaster` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `idvalorespordefecto` INTEGER NOT NULL DEFAULT 0,
+  `codpart` TEXT DEFAULT NULL,
+  `formalcode` TEXT DEFAULT NULL,
+  `descpart` TEXT DEFAULT NULL,
+  `rend` REAL NOT NULL DEFAULT 1.0,
+  `undpart` TEXT DEFAULT NULL,
+  `cantpart` REAL DEFAULT 1.0,
+  `punit` REAL DEFAULT 0.0,
+  `ajuste` REAL DEFAULT 0.0,
+  `comentario_ai` TEXT DEFAULT NULL
+);
+
+-- Table: apu_master_detalles
+DROP TABLE IF EXISTS `apu_master_detalles`;
+CREATE TABLE `apu_master_detalles` (
+  `idapumasterdetalle` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `idapumaster` INTEGER NOT NULL,
+  `posiciondetallepartida` REAL NOT NULL DEFAULT 0.0,
+  `descripcion` TEXT DEFAULT NULL,
+  `unidad` TEXT DEFAULT NULL,
+  `cantins` REAL NOT NULL DEFAULT 0.0,
+  `dp` REAL NOT NULL DEFAULT 0.0,
+  `idmaestro` INTEGER NOT NULL DEFAULT 0,
+  `codpart` TEXT DEFAULT NULL,
+  `tipo` TEXT DEFAULT NULL
+);
+
+-- Table: maestro
+DROP TABLE IF EXISTS `maestro`;
+CREATE TABLE `maestro` (
+  `idmaestro` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `codigo` TEXT NOT NULL DEFAULT '',
+  `costo` REAL NOT NULL DEFAULT 0.0,
+  `fecha` TEXT NOT NULL,
+  `codprov` TEXT NOT NULL DEFAULT ''
+);
+
+-- Table: materiales
+DROP TABLE IF EXISTS `materiales`;
+CREATE TABLE `materiales` (
+  `codigo` TEXT PRIMARY KEY, 
+  `codfam` TEXT, 
+  `descripcion` TEXT, 
+  `unidad` TEXT, 
+  `factor` REAL, 
+  `dp` REAL DEFAULT 0, 
+  `flag` TEXT DEFAULT 'M'
+);
+
+-- Table: equipos
+DROP TABLE IF EXISTS `equipos`;
+CREATE TABLE `equipos` (
+  `codigo` TEXT PRIMARY KEY, 
+  `codfam` TEXT, 
+  `descripcion` TEXT, 
+  `unidad` TEXT, 
+  `factor` REAL, 
+  `dp` REAL DEFAULT 0, 
+  `flag` TEXT DEFAULT 'E'
+);
+
+-- Table: manodeobra
+DROP TABLE IF EXISTS `manodeobra`;
+CREATE TABLE `manodeobra` (
+  `codigo` TEXT PRIMARY KEY, 
+  `codfam` TEXT, 
+  `descripcion` TEXT, 
+  `unidad` TEXT, 
+  `factor` REAL, 
+  `dp` REAL DEFAULT 0, 
+  `flag` TEXT DEFAULT 'O'
+);
+
+-- Table: familia
+DROP TABLE IF EXISTS `familia`;
+CREATE TABLE `familia` (
+  `codfam` TEXT PRIMARY KEY, 
+  `meo` TEXT, 
+  `descripcion` TEXT
+);
+
+-- View: insumos
+DROP TABLE IF EXISTS `insumos`;
+DROP VIEW IF EXISTS `insumos`;
+CREATE VIEW insumos AS 
+SELECT * FROM materiales 
+UNION ALL 
+SELECT * FROM equipos 
+UNION ALL 
+SELECT * FROM manodeobra;
+
+-- View: insumos_con_costo
+DROP TABLE IF EXISTS `insumos_con_costo`;
+DROP VIEW IF EXISTS `insumos_con_costo`;
+CREATE VIEW insumos_con_costo AS
+SELECT i.*, m.costo as punit, m.fecha as fecha_precio, m.idmaestro as idmaestro
+FROM insumos i
+LEFT JOIN maestro m ON m.idmaestro = (
+  SELECT m2.idmaestro FROM maestro m2 
+  WHERE m2.codigo = i.codigo 
+  ORDER BY m2.fecha DESC, m2.idmaestro DESC 
+  LIMIT 1
+);
+
+-- Table: valores_por_defecto
+DROP TABLE IF EXISTS `valores_por_defecto`;
+CREATE TABLE `valores_por_defecto` (
+  `idvalorespordefecto` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `nombre` TEXT NOT NULL DEFAULT '',
+  `prestaciones_sociales_pct` REAL NOT NULL DEFAULT 0.0,
+  `porcentajeadmin` REAL NOT NULL DEFAULT 0.0,
+  `porcentajeutilidad` REAL NOT NULL DEFAULT 0.0,
+  `bonoalimento` REAL NOT NULL DEFAULT 0.0,
+  `piva` REAL NOT NULL DEFAULT 0.0,
+  `ivaenapu` INTEGER NOT NULL DEFAULT 0,
+  `p_imprevistos` REAL NOT NULL DEFAULT 0.0,
+  `horaextradiurna` REAL DEFAULT 0.0,
+  `horaextranocturna` REAL DEFAULT 0.0,
+  `horanocturna` REAL DEFAULT 0.0,
+  `horanocturnaextra` REAL DEFAULT 0.0,
+  `horadominical` REAL DEFAULT 0.0,
+  `horadominicalextra` REAL DEFAULT 0.0,
+  `horafestiva` REAL DEFAULT 0.0,
+  `horafestivaextra` REAL DEFAULT 0.0,
+  `horaextradiurnafestiva` REAL DEFAULT 0.0,
+  `horaextranocturnafestiva` REAL DEFAULT 0.0,
+  `horaextradiurnadominical` REAL DEFAULT 0.0,
+  `horaextranocturnadominical` REAL DEFAULT 0.0,
+  `horas_semanales` REAL DEFAULT 40.0
+);
+
+-- Table: ai_context_obra
+DROP TABLE IF EXISTS `ai_context_obra`;
+CREATE TABLE `ai_context_obra` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `idobra` INTEGER NOT NULL,
+  `titulo` TEXT NOT NULL,
+  `tipo` TEXT NOT NULL DEFAULT 'memoria_descriptiva',
+  `resumen_ia` TEXT DEFAULT NULL,
+  `texto_extraido` TEXT DEFAULT NULL,
+  `fecha_carga` TEXT DEFAULT (datetime('now')),
+  `usuario` TEXT DEFAULT NULL
+);
+
+-- Table: ai_context_apu
+DROP TABLE IF EXISTS `ai_context_apu`;
+CREATE TABLE `ai_context_apu` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `idapumaster` INTEGER NOT NULL,
+  `titulo` TEXT NOT NULL,
+  `resumen_ia` TEXT DEFAULT NULL,
+  `texto_extraido` TEXT DEFAULT NULL,
+  `fecha_carga` TEXT DEFAULT (datetime('now')),
+  `usuario` TEXT DEFAULT NULL
+);
+
+-- Table: ai_context_po
+DROP TABLE IF EXISTS `ai_context_po`;
+CREATE TABLE `ai_context_po` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `idoc` INTEGER NOT NULL,
+  `notas_ia` TEXT,
+  `resultado_revision` TEXT,
+  `fecha_revision` TEXT DEFAULT (datetime('now'))
+);
+
+-- Table: proveedores
+DROP TABLE IF EXISTS `proveedores`;
+CREATE TABLE `proveedores` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `codproveedor` TEXT NOT NULL UNIQUE,
+  `proveedor` TEXT NOT NULL,
+  `rif` TEXT DEFAULT NULL,
+  `telefono` TEXT DEFAULT NULL,
+  `email` TEXT DEFAULT NULL,
+  `direccion` TEXT DEFAULT NULL,
+  `ciudad` TEXT DEFAULT NULL,
+  `pais` TEXT DEFAULT NULL,
+  `created_at` TEXT DEFAULT (datetime('now')),
+  `updated_at` TEXT DEFAULT (datetime('now'))
+);
+
+-- APU Indexes
+CREATE INDEX IF NOT EXISTS idx_apu_master_codpart ON apu_master(codpart);
+CREATE INDEX IF NOT EXISTS idx_apu_master_detalles_parent ON apu_master_detalles(idapumaster);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_maestro_codigo_fecha_prov ON maestro(codigo, fecha, codprov);
+CREATE INDEX IF NOT EXISTS idx_materiales_codfam ON materiales(codfam);
+CREATE INDEX IF NOT EXISTS idx_equipos_codfam ON equipos(codfam);
+CREATE INDEX IF NOT EXISTS idx_manodeobra_codfam ON manodeobra(codfam);
+CREATE INDEX IF NOT EXISTS idx_familia_lookup ON familia(codfam, meo);
+
+PRAGMA foreign_keys = ON;
